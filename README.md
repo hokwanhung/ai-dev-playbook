@@ -127,11 +127,13 @@ description: >
 
 ## Playbook-owned skills
 
-None yet beyond the core pack. When you consolidate the first custom skill, list it here:
+Custom skills live next to the core pack and are never listed in [`scripts/core-skills.txt`](scripts/core-skills.txt).
 
 | Skill | Source / lesson | Role |
 |---|---|---|
-| _(add rows)_ | _(which project taught this)_ | _(one-line job)_ |
+| `architecture-free-principles` | First large app built with heavy AI use, then stripped of that stack | Constraints for persistence, cache, permissions, queries, collections, and releases when the next architecture is unknown |
+
+The short always-on limits sit in [`.cursor/rules/agent-operating-invariants.mdc`](.cursor/rules/agent-operating-invariants.mdc). How to install both into another repo: [docs/architecture-free-principles.md](docs/architecture-free-principles.md).
 
 ## Sync (core pack only)
 

@@ -1,0 +1,15 @@
+---
+description: Always-on limits for any repo. Build, runtime, comments, git cwd, and where a repeated lesson must be recorded.
+alwaysApply: true
+---
+
+# Agent operating invariants
+
+These hold in every architecture. For persistence, cache, permissions, queries, collection updates, and releases, follow the `architecture-free-principles` skill.
+
+- Investigate freely. Run a build, restart, deploy, schema change, production data change, or client-facing send only when the user asked for that action in the current message. Say why a restart or migration matters. Continue work that depends on the new runtime only after they confirm the process is up.
+- A green build proves the source is consistent. It does not prove the running process has the new stored fields, the new configuration, or the server the client is calling. Name what must exist at runtime, and what to check if the error is an unknown column or a missing field.
+- Before changing application logic, confirm which environment is answering: local process, remote host, stale proxy, or a deploy script that no longer matches the known-good copy.
+- Do not delete or rewrite existing comments unless the user asked. If an edit makes a comment false, correct that comment. Add a comment only for a constraint the code cannot show.
+- In a workspace of several repositories, run status, diff, and commit in the repository that owns the files.
+- After a repeated mistake, record the constraint in a rule or skill the next session will load. A plan is the decision for one change. A rule is what stays true after it. When they disagree, follow the rule and correct the plan the next time you touch it.
