@@ -36,21 +36,28 @@ mkdir -p "${ROOT}/vendor" "${SKILLS_DEST}"
 
 if [[ ! -d "${VENDOR_DIR}/.git" ]]; then
   echo "Cloning ${UPSTREAM_URL} → ${VENDOR_DIR}"
+  # --no-checkout: avoid materializing tip of main; we always check out the pin below.
   git clone --filter=blob:none --no-checkout "${UPSTREAM_URL}" "${VENDOR_DIR}"
 fi
 
-CURRENT_SHA="$(git -C "${VENDOR_DIR}" rev-parse HEAD 2>/dev/null || true)"
-if [[ "${CURRENT_SHA}" != "${PINNED_SHA}" ]]; then
+# Fresh --no-checkout clones often already have HEAD == pin (tip of main) with an
+# empty working tree. Always ensure the commit object exists, then reset --hard so
+# the disposable vendor cache matches the pin before we copy skills out.
+if ! git -C "${VENDOR_DIR}" cat-file -e "${PINNED_SHA}^{commit}" 2>/dev/null; then
   echo "Fetching pinned SHA ${PINNED_SHA}"
   git -C "${VENDOR_DIR}" fetch --depth 1 origin "${PINNED_SHA}"
-  git -C "${VENDOR_DIR}" checkout --force "${PINNED_SHA}"
-else
-  echo "Vendor already at pinned SHA ${PINNED_SHA}"
 fi
+
+echo "Resetting vendor to pinned SHA ${PINNED_SHA}"
+git -C "${VENDOR_DIR}" reset --hard "${PINNED_SHA}"
 
 UPSTREAM_SHA="$(git -C "${VENDOR_DIR}" rev-parse HEAD)"
 if [[ "${UPSTREAM_SHA}" != "${PINNED_SHA}" ]]; then
   echo "error: vendor HEAD ${UPSTREAM_SHA} does not match pin ${PINNED_SHA}" >&2
+  exit 1
+fi
+if [[ ! -d "${VENDOR_DIR}/skills" ]]; then
+  echo "error: vendor tree at ${PINNED_SHA} has no skills/ directory (checkout failed?)" >&2
   exit 1
 fi
 echo "Upstream SHA: ${UPSTREAM_SHA}"
