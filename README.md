@@ -1,6 +1,8 @@
-# Matt Pocock core skills pack
+# AI Dev Playbook
 
-Thin curated mirror of [mattpocock/skills](https://github.com/mattpocock/skills) for **Cursor**. Always sync from upstream; only install the core few listed below. This is not a fork that rewrites Matt’s process.
+A practical playbook of **important skills and workflows for coding with AI** (Cursor-first).
+
+This repo starts with a thin curated mirror of [mattpocock/skills](https://github.com/mattpocock/skills): always sync from upstream, install only the core few below. It is not a fork that rewrites Matt’s process. More playbook material can grow around this core over time.
 
 ## Skills
 
@@ -16,7 +18,7 @@ Thin curated mirror of [mattpocock/skills](https://github.com/mattpocock/skills)
 | `diagnosing-bugs` | Hard-bug diagnosis loop |
 | `code-review` | Standards + spec review |
 
-The full skill set lives upstream; this repo only vendors the subset above under `.cursor/skills/`.
+The full Matt skill set lives upstream; this repo vendors the subset above under `.cursor/skills/`.
 
 ## How to use
 
@@ -26,7 +28,7 @@ The full skill set lives upstream; this repo only vendors the subset above under
 ./scripts/sync-core-skills.sh
 ```
 
-2. Open the **target app repo** in Cursor (not necessarily this pack repo).
+2. Open the **target app repo** in Cursor (not necessarily this playbook repo).
 3. Run `/setup-matt-pocock-skills` once per consuming repo.
 4. Daily loop:
 
