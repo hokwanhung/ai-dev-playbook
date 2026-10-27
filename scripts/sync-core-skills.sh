@@ -1,17 +1,28 @@
 #!/usr/bin/env bash
-# Refresh vendor/mattpocock-skills from upstream and install only the core skills.
+# Refresh vendor/mattpocock-skills at the pinned SHA and install only the core skills.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENDOR_DIR="${ROOT}/vendor/mattpocock-skills"
 SKILLS_DEST="${ROOT}/.cursor/skills"
 CORE_LIST="${ROOT}/scripts/core-skills.txt"
+PIN_FILE="${ROOT}/scripts/upstream-sha.txt"
 MANAGED_STAMP="${SKILLS_DEST}/.core-skills-managed"
 UPSTREAM_URL="https://github.com/mattpocock/skills.git"
-UPSTREAM_BRANCH="main"
 
 if [[ ! -f "${CORE_LIST}" ]]; then
   echo "error: missing core skill list: ${CORE_LIST}" >&2
+  exit 1
+fi
+
+if [[ ! -f "${PIN_FILE}" ]]; then
+  echo "error: missing upstream pin: ${PIN_FILE}" >&2
+  exit 1
+fi
+
+PINNED_SHA="$(tr -d '[:space:]' < "${PIN_FILE}")"
+if [[ ! "${PINNED_SHA}" =~ ^[0-9a-fA-F]{40}$ ]]; then
+  echo "error: ${PIN_FILE} must contain a 40-char hex SHA (got: '${PINNED_SHA}')" >&2
   exit 1
 fi
 
@@ -25,15 +36,23 @@ mkdir -p "${ROOT}/vendor" "${SKILLS_DEST}"
 
 if [[ ! -d "${VENDOR_DIR}/.git" ]]; then
   echo "Cloning ${UPSTREAM_URL} → ${VENDOR_DIR}"
-  git clone --depth 1 --branch "${UPSTREAM_BRANCH}" "${UPSTREAM_URL}" "${VENDOR_DIR}"
+  git clone --filter=blob:none --no-checkout "${UPSTREAM_URL}" "${VENDOR_DIR}"
+fi
+
+CURRENT_SHA="$(git -C "${VENDOR_DIR}" rev-parse HEAD 2>/dev/null || true)"
+if [[ "${CURRENT_SHA}" != "${PINNED_SHA}" ]]; then
+  echo "Fetching pinned SHA ${PINNED_SHA}"
+  git -C "${VENDOR_DIR}" fetch --depth 1 origin "${PINNED_SHA}"
+  git -C "${VENDOR_DIR}" checkout --force "${PINNED_SHA}"
 else
-  echo "Updating ${VENDOR_DIR}"
-  git -C "${VENDOR_DIR}" fetch origin "${UPSTREAM_BRANCH}"
-  git -C "${VENDOR_DIR}" checkout "${UPSTREAM_BRANCH}"
-  git -C "${VENDOR_DIR}" pull --ff-only origin "${UPSTREAM_BRANCH}"
+  echo "Vendor already at pinned SHA ${PINNED_SHA}"
 fi
 
 UPSTREAM_SHA="$(git -C "${VENDOR_DIR}" rev-parse HEAD)"
+if [[ "${UPSTREAM_SHA}" != "${PINNED_SHA}" ]]; then
+  echo "error: vendor HEAD ${UPSTREAM_SHA} does not match pin ${PINNED_SHA}" >&2
+  exit 1
+fi
 echo "Upstream SHA: ${UPSTREAM_SHA}"
 
 find_skill_src() {
@@ -112,6 +131,7 @@ done
 echo
 echo "=== Sync summary ==="
 echo "Upstream: ${UPSTREAM_URL}"
+echo "Pin:      ${PINNED_SHA}"
 echo "SHA:      ${UPSTREAM_SHA}"
 echo "Installed:"
 for name in "${CORE_SKILLS[@]}"; do

@@ -1,0 +1,107 @@
+name: skills-bump
+
+on:
+  schedule:
+    # Mondays 09:00 UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: skills-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need a token that can push a branch and open a PR.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect upstream tip vs pin
+        id: detect
+        env:
+          UPSTREAM_URL: https://github.com/mattpocock/skills.git
+        run: |
+          set -euo pipefail
+          PIN_FILE=scripts/upstream-sha.txt
+          OLD_SHA="$(tr -d '[:space:]' < "${PIN_FILE}")"
+          NEW_SHA="$(git ls-remote "${UPSTREAM_URL}" refs/heads/main | awk '{print $1}')"
+          if [[ ! "${NEW_SHA}" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "error: could not resolve upstream main SHA" >&2
+            exit 1
+          fi
+          echo "old_sha=${OLD_SHA}" >> "${GITHUB_OUTPUT}"
+          echo "new_sha=${NEW_SHA}" >> "${GITHUB_OUTPUT}"
+          if [[ "${OLD_SHA}" == "${NEW_SHA}" ]]; then
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+            echo "Pin already at upstream main (${NEW_SHA})"
+          else
+            echo "changed=true" >> "${GITHUB_OUTPUT}"
+            echo "Pin bump needed: ${OLD_SHA} → ${NEW_SHA}"
+          fi
+
+      - name: Bump pin and sync
+        if: steps.detect.outputs.changed == 'true'
+        env:
+          OLD_SHA: ${{ steps.detect.outputs.old_sha }}
+          NEW_SHA: ${{ steps.detect.outputs.new_sha }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "${NEW_SHA}" > scripts/upstream-sha.txt
+          bash ./scripts/sync-core-skills.sh
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BRANCH="chore/bump-mattpocock-skills"
+          git fetch origin "${BRANCH}" 2>/dev/null || true
+          git checkout -B "${BRANCH}"
+          git add scripts/upstream-sha.txt .cursor/skills
+          if git diff --cached --quiet; then
+            echo "No file changes after sync; nothing to push."
+            echo "skip_pr=true" >> "${GITHUB_ENV}"
+            exit 0
+          fi
+          git commit -m "chore: bump mattpocock/skills to ${NEW_SHA:0:12}"
+          if git ls-remote --exit-code --heads origin "${BRANCH}" >/dev/null 2>&1; then
+            git fetch origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
+            git push --force-with-lease=refs/remotes/origin/${BRANCH} origin "HEAD:${BRANCH}"
+          else
+            git push -u origin "HEAD:${BRANCH}"
+          fi
+          echo "skip_pr=false" >> "${GITHUB_ENV}"
+          echo "branch=${BRANCH}" >> "${GITHUB_ENV}"
+
+      - name: Open or update pull request
+        if: steps.detect.outputs.changed == 'true' && env.skip_pr != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLD_SHA: ${{ steps.detect.outputs.old_sha }}
+          NEW_SHA: ${{ steps.detect.outputs.new_sha }}
+          BRANCH: chore/bump-mattpocock-skills
+        run: |
+          set -euo pipefail
+          TITLE="chore: bump mattpocock/skills (${OLD_SHA:0:12} → ${NEW_SHA:0:12})"
+          BODY=$(printf '%s\n' \
+            '## Summary' \
+            '' \
+            'Deliberate upgrade of the pinned Matt skills mirror.' \
+            '' \
+            '- Upstream: https://github.com/mattpocock/skills' \
+            "- Old pin: \`${OLD_SHA}\`" \
+            "- New pin: \`${NEW_SHA}\`" \
+            "- Compare: https://github.com/mattpocock/skills/compare/${OLD_SHA}...${NEW_SHA}" \
+            '' \
+            'Core skills were re-synced with `./scripts/sync-core-skills.sh`. Merge to accept the upgrade; close to stay on the current pin.')
+          EXISTING="$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')"
+          if [[ -n "${EXISTING}" ]]; then
+            gh pr edit "${EXISTING}" --title "${TITLE}" --body "${BODY}"
+            echo "Updated PR #${EXISTING}"
+          else
+            gh pr create --head "${BRANCH}" --title "${TITLE}" --body "${BODY}"
+          fi
