@@ -1,5 +1,5 @@
 ---
-description: Always-on limits for any repo. Build, runtime, comment policy, git cwd, the plan file, and where a repeated lesson must be recorded.
+description: Always-on limits for any repo. Build, runtime, comment policy, git cwd, the plan file, typecheck before a plan is done, and where a repeated lesson must be recorded.
 alwaysApply: true
 ---
 
@@ -13,6 +13,4 @@ These hold in every architecture. For persistence, cache, permissions, queries, 
 - Do not add a comment, rule, or skill line for a constraint an API or a check can encode. Keep a comment that states a host constraint the compiler cannot see (two SQL doors, IIS, a process the agent must not restart). If an edit makes that comment false, correct it. As part of a correction, delete comments that only justify the workaround being removed. Do not sweep the rest of the repo for comments.
 - In a workspace of several repositories, run status, diff, and commit in the repository that owns the files.
 - After a repeated mistake, record the constraint in a rule or skill the next session will load. A plan is the decision for one change. A rule is what stays true after it. When they disagree, follow the rule and correct the plan the next time you touch it.
-- When the work is planned before code, finish with a markdown plan file the next session can open. Chat prose is not the plan. Include the problem, the decisions locked, the approach, the important paths, and what a person must still do.
-- Ask only the one or two questions that would change that plan, in the same turn, using the structured question UI when the session has one. Do not end the turn and wait for a freeform reply.
-- When the user says the change still fails, or behaves differently from the plan or a doc, rewrite that file in the same turn as the fix. Record the new error in their words, why the previous write-up was wrong, and the behavior that holds after the fix. Remove steps that were tried and did not fix it.
+- Plan mode follows `plan-mode-clarification`: a markdown plan file, questions in the same turn, rewrite that file when a later failure shows it was wrong, and a typecheck before the implemented plan is done. A unit-test run does not replace the typecheck. Skip a check that restarts a host process the user did not ask to restart, and say that it was not run.

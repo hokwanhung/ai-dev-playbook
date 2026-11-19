@@ -136,7 +136,7 @@ Custom skills live next to the core pack and are never listed in [`scripts/core-
 | `architecture-free-principles` | First large app built with heavy AI use, then stripped of that stack | Constraints for persistence, cache, permissions, queries, collections, releases, and keeping the repo's own UI libraries when the next architecture is unknown |
 | `trust-pyramid` | Lauren Tan, AI Engineer CODE 2026, then cut to what fits an app that already has rules | Where a correction lands: API or check before prose. Outranks the Matt Pocock skills on that question. Skip doc-only packs |
 
-The short always-on limits sit in [`.cursor/rules/agent-operating-invariants.mdc`](.cursor/rules/agent-operating-invariants.mdc). How to install both into another repo: [docs/architecture-free-principles.md](docs/architecture-free-principles.md). The trust-pyramid rule is [`.cursor/rules/trust-pyramid.mdc`](.cursor/rules/trust-pyramid.mdc). The talk, the fit verdict, and the install note are in [docs/agent-trust-pyramid.md](docs/agent-trust-pyramid.md).
+The short always-on limits sit in [`.cursor/rules/agent-operating-invariants.mdc`](.cursor/rules/agent-operating-invariants.mdc). Plan mode, the plan file, and typecheck-before-done sit in [`.cursor/rules/plan-mode-clarification.mdc`](.cursor/rules/plan-mode-clarification.mdc). How to install both into another repo: [docs/architecture-free-principles.md](docs/architecture-free-principles.md). The trust-pyramid rule is [`.cursor/rules/trust-pyramid.mdc`](.cursor/rules/trust-pyramid.mdc). The talk, the fit verdict, and the install note are in [docs/agent-trust-pyramid.md](docs/agent-trust-pyramid.md).
 
 ## Sync (core pack only)
 

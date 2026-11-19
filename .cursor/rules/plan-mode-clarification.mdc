@@ -1,0 +1,43 @@
+---
+description: Clarify Plan Mode tasks, keep a markdown plan, and typecheck before an implemented plan is done
+alwaysApply: true
+---
+
+# Plan Mode Clarification
+
+When using Plan Mode, estimate confidence that the task is understood well enough to produce a useful plan.
+
+- If confidence is below 90%, ask clarifying questions before presenting a plan.
+- If confidence is at least 90%, proceed with the plan and briefly state any important assumptions.
+- Prefer clarifying scope, success criteria, constraints, risks, and user preferences that would materially change the plan.
+- Do not ask redundant questions when the current request, open files, or prior context already answer them.
+
+## In-process questions
+
+When clarifying questions are needed (confidence below 90%, or a skill requires a Plan Mode ask):
+
+1. Use the platform structured question UI when that tool exists in the session, for 1–2 critical questions at a time.
+2. Call it in the same Plan Mode turn. Do not end the turn with chat-only clarifying questions that wait for a freeform follow-up message.
+3. Wait for those answers before creating the plan.
+4. If the structured question tool is temporarily unavailable, still keep questions inside the same turn using whatever structured question mechanism is available, then create the plan. Do not fall back to ending the turn and waiting for a new user message.
+
+Anti-pattern: posting clarifying questions as normal assistant prose and stopping so the user must send a new message with answers.
+
+## Always produce a markdown plan
+
+Whenever Plan Mode is used for a task (new work, evaluation, cherry-pick inventory, hotfix approach, etc.):
+
+1. Produce a durable plan as a markdown file (via the plan tool and/or writing under `.cursor/plans/*.plan.md`).
+2. Do not finish Plan Mode with only chat prose for the plan. The user must be able to open an `.md` plan file.
+3. When the plan is iterated (user answers questions, changes scope, confirms failure mode), update that markdown plan file so it stays the source of truth.
+4. When the user says the change still fails, rewrite that plan in the same turn as the fix. Record the new error in their words, why the previous write-up was wrong, and the behavior that holds after the fix. Remove steps that were tried and did not fix it.
+5. The plan markdown should include: problem/context, decisions locked, concrete approach, important file paths, and (when relevant) manual actions / test notes.
+
+## Typecheck before an implemented plan is done
+
+Marking todos complete is not the end of the work. Before you tell the user an implemented plan is done, run the project's typecheck for the code that plan changed. A unit-test run does not replace the compiler.
+
+- The plan stays open while that check reports errors. Fix them in the same turn, then run it again. In the closing note, say which check ran and that it passed.
+- Skip a check that restarts a host process the user did not ask to restart. Say that it was not run. The consuming repo names that command.
+
+The consuming repo's stack rule names the exact typecheck command. This file does not.

@@ -6,7 +6,7 @@ Two artifacts, on purpose:
 
 | Artifact | Path | Why this shape |
 |---|---|---|
-| Always-on rule | [`.cursor/rules/agent-operating-invariants.mdc`](../.cursor/rules/agent-operating-invariants.mdc) | Short limits that must apply even when the model does not load a skill: no surprise build or deploy, a green build is not a running system, comments only for a host constraint the compiler cannot see, git in the owning repo, the plan file is the source of truth, write repeated lessons down |
+| Always-on rule | [`.cursor/rules/agent-operating-invariants.mdc`](../.cursor/rules/agent-operating-invariants.mdc) | Short limits that must apply even when the model does not load a skill: no surprise build or deploy, a green build is not a running system, comments only for a host constraint the compiler cannot see, git in the owning repo, the plan file is the source of truth, typecheck before an implemented plan is done, write repeated lessons down |
 | Skill | [`.cursor/skills/architecture-free-principles/`](../.cursor/skills/architecture-free-principles/SKILL.md) | The thirteen principles. Loaded when a change can touch persistence, cache, permissions, queries, collections, workflow, a release, or a UI guide that would replace a component |
 
 The full text the agent reads is [references/principles.md](../.cursor/skills/architecture-free-principles/references/principles.md). It lives inside the skill so copying the skill folder into another repo is enough. This page is the human map. When a principle changes, edit the reference and keep this page's summary in step.
@@ -16,7 +16,7 @@ Stack-specific mechanics (a host's table names, a UI kit, a folder map) stay in 
 ## Install into a target repo
 
 1. Copy `.cursor/skills/architecture-free-principles/` into the target repo's `.cursor/skills/`.
-2. Copy `.cursor/rules/agent-operating-invariants.mdc` into the target repo's `.cursor/rules/`.
+2. Copy `.cursor/rules/agent-operating-invariants.mdc` and `.cursor/rules/plan-mode-clarification.mdc` into the target repo's `.cursor/rules/`.
 3. Do not add `architecture-free-principles` to `scripts/core-skills.txt`. Sync only manages the upstream pack and would treat a custom name as drift.
 
 ## The thirteen principles
