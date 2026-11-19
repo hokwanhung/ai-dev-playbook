@@ -1,0 +1,13 @@
+---
+description: Where a correction lands. Outranks Matt Pocock skills on that question. Defers to the consuming repo's existing rules and to host gates.
+alwaysApply: true
+---
+
+# Trust pyramid
+
+On implement, correct, or review of application code, follow the `trust-pyramid` skill. When that skill and a Matt Pocock skill disagree about where a correction lives, follow the trust pyramid. `diagnosing-bugs` still runs the diagnosis. `grill-with-docs`, `to-spec`, `to-tickets`, `tdd`, and `code-review` are optional tools, not the default sequence.
+
+- Existing rules and skills in the consuming repo outrank this skill's examples. Do not add a second prose rule for a constraint that repo already encodes. Do not require a test suite, an issue tracker, or a feature map.
+- A repeated mistake is not fixed by another paragraph in a spec, ticket, or `AGENTS.md`. Removing old copies of that pattern stays inside the area already being changed.
+- `agent-operating-invariants` still gates build, restart, deploy, schema, production data, and client-facing sends. If that gate blocks running the system, report the gap. `architecture-free-principles` still covers persistence, cache, permissions, queries, collections, and releases.
+- Do not start auto-merge, unattended fuzzing, or a pstack install from this rule.

@@ -1,5 +1,5 @@
 ---
-description: Always-on limits for any repo. Build, runtime, comments, git cwd, the plan file, and where a repeated lesson must be recorded.
+description: Always-on limits for any repo. Build, runtime, comment policy, git cwd, the plan file, and where a repeated lesson must be recorded.
 alwaysApply: true
 ---
 
@@ -10,7 +10,7 @@ These hold in every architecture. For persistence, cache, permissions, queries, 
 - Investigate freely. Run a build, restart, deploy, schema change, production data change, or client-facing send only when the user asked for that action in the current message. Say why a restart or migration matters. Continue work that depends on the new runtime only after they confirm the process is up.
 - A green build proves the source is consistent. It does not prove the running process has the new stored fields, the new configuration, or the server the client is calling. Name what must exist at runtime, and what to check if the error is an unknown column or a missing field.
 - Before changing application logic, confirm which environment is answering: local process, remote host, stale proxy, or a deploy script that no longer matches the known-good copy.
-- Do not delete or rewrite existing comments unless the user asked. If an edit makes a comment false, correct that comment. Add a comment only for a constraint the code cannot show.
+- Do not add a comment, rule, or skill line for a constraint an API or a check can encode. Keep a comment that states a host constraint the compiler cannot see (two SQL doors, IIS, a process the agent must not restart). If an edit makes that comment false, correct it. As part of a correction, delete comments that only justify the workaround being removed. Do not sweep the rest of the repo for comments.
 - In a workspace of several repositories, run status, diff, and commit in the repository that owns the files.
 - After a repeated mistake, record the constraint in a rule or skill the next session will load. A plan is the decision for one change. A rule is what stays true after it. When they disagree, follow the rule and correct the plan the next time you touch it.
 - When the work is planned before code, finish with a markdown plan file the next session can open. Chat prose is not the plan. Include the problem, the decisions locked, the approach, the important paths, and what a person must still do.

@@ -6,7 +6,7 @@ Two artifacts, on purpose:
 
 | Artifact | Path | Why this shape |
 |---|---|---|
-| Always-on rule | [`.cursor/rules/agent-operating-invariants.mdc`](../.cursor/rules/agent-operating-invariants.mdc) | Short limits that must apply even when the model does not load a skill: no surprise build or deploy, a green build is not a running system, keep comments, git in the owning repo, the plan file is the source of truth, write repeated lessons down |
+| Always-on rule | [`.cursor/rules/agent-operating-invariants.mdc`](../.cursor/rules/agent-operating-invariants.mdc) | Short limits that must apply even when the model does not load a skill: no surprise build or deploy, a green build is not a running system, comments only for a host constraint the compiler cannot see, git in the owning repo, the plan file is the source of truth, write repeated lessons down |
 | Skill | [`.cursor/skills/architecture-free-principles/`](../.cursor/skills/architecture-free-principles/SKILL.md) | The thirteen principles. Loaded when a change can touch persistence, cache, permissions, queries, collections, workflow, a release, or a UI guide that would replace a component |
 
 The full text the agent reads is [references/principles.md](../.cursor/skills/architecture-free-principles/references/principles.md). It lives inside the skill so copying the skill folder into another repo is enough. This page is the human map. When a principle changes, edit the reference and keep this page's summary in step.

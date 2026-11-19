@@ -36,11 +36,13 @@ The full Matt skill set lives upstream; this repo vendors the subset above under
 2. Open the **target app repo** in Cursor (not necessarily this playbook repo).
 3. Copy or symlink the skills you need into that repo’s `.cursor/skills/` (core pack and any playbook-owned skills), or open both workspaces if your workflow supports it.
 4. Run `/setup-matt-pocock-skills` once per consuming repo.
-5. Daily loop:
+5. Daily loop on application code:
 
 ```text
-/grill-with-docs → /to-spec → /to-tickets → implement with /tdd → /code-review
+trust pyramid (API or check, then verify) → /diagnosing-bugs when something is broken
 ```
+
+`grill-with-docs`, `to-spec`, `to-tickets`, `tdd`, and `code-review` are available when a domain, a spec, or a large-branch review is actually the task. They do not decide where a correction lives. The precedence is [`.cursor/rules/trust-pyramid.mdc`](.cursor/rules/trust-pyramid.mdc).
 
 ## Consolidating experience from other repos
 
@@ -132,8 +134,9 @@ Custom skills live next to the core pack and are never listed in [`scripts/core-
 | Skill | Source / lesson | Role |
 |---|---|---|
 | `architecture-free-principles` | First large app built with heavy AI use, then stripped of that stack | Constraints for persistence, cache, permissions, queries, collections, releases, and keeping the repo's own UI libraries when the next architecture is unknown |
+| `trust-pyramid` | Lauren Tan, AI Engineer CODE 2026, then cut to what fits an app that already has rules | Where a correction lands: API or check before prose. Outranks the Matt Pocock skills on that question. Skip doc-only packs |
 
-The short always-on limits sit in [`.cursor/rules/agent-operating-invariants.mdc`](.cursor/rules/agent-operating-invariants.mdc). How to install both into another repo: [docs/architecture-free-principles.md](docs/architecture-free-principles.md).
+The short always-on limits sit in [`.cursor/rules/agent-operating-invariants.mdc`](.cursor/rules/agent-operating-invariants.mdc). How to install both into another repo: [docs/architecture-free-principles.md](docs/architecture-free-principles.md). The trust-pyramid rule is [`.cursor/rules/trust-pyramid.mdc`](.cursor/rules/trust-pyramid.mdc). The talk, the fit verdict, and the install note are in [docs/agent-trust-pyramid.md](docs/agent-trust-pyramid.md).
 
 ## Sync (core pack only)
 

@@ -107,7 +107,7 @@ Stored write models, read projections, and API contracts stay different types wh
 
 A ticket title is a slice. Other commits in the same area can change the same behavior. Classify each candidate as the ticket, related, another area, or schema and data. Ask before including the related ones. Call out schema and data in their own step, and apply them only with an explicit yes. Take older commits first. Resolve a conflict by what each side was trying to do. Stop when the other side was never requested.
 
-Do not let formatting, comment cleanup, or warning cleanup become the task. A hook that formats or lints the whole tree will rewrite files the pick did not touch. Bypass hooks on pick commits. Do not reformat the tree to make that hook pass. Existing comments stay. If an edit makes a comment false, correct that comment. Add a comment only for a constraint the code cannot show.
+Do not let formatting, comment cleanup, or warning cleanup become the task. A hook that formats or lints the whole tree will rewrite files the pick did not touch. Bypass hooks on pick commits. Do not reformat the tree to make that hook pass. Comment policy lives in `agent-operating-invariants`: do not add a comment for a constraint an API or a check can encode; keep a comment that states a host constraint the compiler cannot see; delete a comment only when it justifies the workaround this correction is removing.
 
 Client text and engineer text are different artifacts. Read the product first so the reply does not promise behavior that already exists. The client version states the effect. The engineer version may name the cause. Group repeated incidents by a small set of known causes, with a confidence note, instead of treating each ticket as a new kind of failure.
 
