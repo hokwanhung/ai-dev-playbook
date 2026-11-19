@@ -1,5 +1,5 @@
 ---
-description: Always-on limits for any repo. Build, runtime, comments, git cwd, and where a repeated lesson must be recorded.
+description: Always-on limits for any repo. Build, runtime, comments, git cwd, the plan file, and where a repeated lesson must be recorded.
 alwaysApply: true
 ---
 
@@ -13,3 +13,6 @@ These hold in every architecture. For persistence, cache, permissions, queries, 
 - Do not delete or rewrite existing comments unless the user asked. If an edit makes a comment false, correct that comment. Add a comment only for a constraint the code cannot show.
 - In a workspace of several repositories, run status, diff, and commit in the repository that owns the files.
 - After a repeated mistake, record the constraint in a rule or skill the next session will load. A plan is the decision for one change. A rule is what stays true after it. When they disagree, follow the rule and correct the plan the next time you touch it.
+- When the work is planned before code, finish with a markdown plan file the next session can open. Chat prose is not the plan. Include the problem, the decisions locked, the approach, the important paths, and what a person must still do.
+- Ask only the one or two questions that would change that plan, in the same turn, using the structured question UI when the session has one. Do not end the turn and wait for a freeform reply.
+- When the user says the change still fails, or behaves differently from the plan or a doc, rewrite that file in the same turn as the fix. Record the new error in their words, why the previous write-up was wrong, and the behavior that holds after the fix. Remove steps that were tried and did not fix it.

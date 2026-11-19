@@ -4,9 +4,10 @@ description: >
   Apply stack-agnostic engineering constraints when implementing, reviewing,
   or planning a change and the architecture or size of the system is unknown
   or different from the last project. Use for persistence, cache, permissions,
-  queries, collection updates, workflow state, releases, cherry-picks, and
-  client-facing wording. Also use when the user asks for reusable rules, a
-  playbook, or lessons that should survive a new stack.
+  queries, collection updates, workflow state, releases, cherry-picks,
+  client-facing wording, and a UI or platform guide that would replace a
+  component the repo already uses. Also use when the user asks for reusable
+  rules, a playbook, or lessons that should survive a new stack.
 ---
 
 # Architecture-free principles
@@ -14,7 +15,8 @@ description: >
 ## When to use
 
 - A non-trivial change to data access, caching, authorization, validation, child records, workflow, search results, or a release
-- Review of a change that might repeat a known failure (wipe-and-recreate, mixed query dialects, cache copied from the wrong kind of id, a ticket that is not the whole diff)
+- Review of a change that might repeat a known failure (wipe-and-recreate, mixed query dialects, cache copied from the wrong kind of id, a ticket that is not the whole diff, a whole-tree formatter on a cherry-pick)
+- An external guide whose sample would replace a component, control, or library the repo already uses
 - The user asks to carry lessons into another repo
 
 Skip this skill for typos, copy edits, and questions that cannot touch those concerns.
